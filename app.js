@@ -10,24 +10,47 @@ function getTone(input) {
     name: "🎵 Default Tone"
   };
 
-  if (input.includes("metallica") || input.includes("metal") || input.includes("slayer")) {
-    return {
-      gain: 9, treble: 7, mid: 4, bass: 8, reverb: 2,
+  if (input.includes("metal") || input.includes("metallica")) {
+    tone = {
+      gain: 9,
+      treble: 7,
+      mid: 4,
+      bass: 8,
+      reverb: 2,
       name: "🔥 Metal Tone"
     };
   }
 
-  if (input.includes("nirvana") || input.includes("grunge")) {
-    return {
-      gain: 8, treble: 7, mid: 3, bass: 7, reverb: 3,
+  else if (input.includes("nirvana") || input.includes("grunge")) {
+    tone = {
+      gain: 8,
+      treble: 7,
+      mid: 3,
+      bass: 7,
+      reverb: 3,
       name: "🎸 Grunge Tone"
     };
   }
 
-  if (input.includes("blues") || input.includes("clapton") || input.includes("mayer")) {
-    return {
-      gain: 4, treble: 6, mid: 8, bass: 5, reverb: 5,
+  else if (input.includes("blues") || input.includes("mayer")) {
+    tone = {
+      gain: 4,
+      treble: 6,
+      mid: 8,
+      bass: 5,
+      reverb: 5,
       name: "🎷 Blues Tone"
+    };
+  }
+
+  else if (input.includes("acdc") || input.includes("queen")) {
+    tone = {
+      gain: 7,
+      treble: 6,
+      mid: 6,
+      bass: 7,
+      reverb: 4,
+      name: "🎤 Classic Rock Tone"
     };
   }
 
@@ -35,7 +58,7 @@ function getTone(input) {
 }
 
 
-function applyGear(tone, pickup, body, amp, effects) {
+function applyGear(tone, pickup, body, amp) {
 
   // pickups
   if (pickup === "humbucker") {
@@ -60,41 +83,28 @@ function applyGear(tone, pickup, body, amp, effects) {
   }
 
   // amps
-  const amps = {
-    fender: { treble: 2, reverb: 2, gain: -1 },
-    vox: { mid: 2 },
-    marshall: { gain: 2, mid: 1 },
-    mesa: { gain: 3, bass: 2 },
-    peavey: { gain: 4 },
-    orange: { mid: 2, bass: 1 },
-    roland: { reverb: 3, treble: 1 }
-  };
-
-  if (amps[amp]) {
-    for (let key in amps[amp]) {
-      tone[key] += amps[amp][key];
-    }
+  if (amp === "fender") {
+    tone.treble += 2;
+    tone.reverb += 2;
   }
 
-  // effects (multi-select)
-  effects.forEach(effect => {
+  if (amp === "vox") {
+    tone.mid += 2;
+  }
 
-    if (effect === "overdrive") tone.gain += 1;
+  if (amp === "marshall") {
+    tone.gain += 1;
+    tone.mid += 1;
+  }
 
-    if (effect === "distortion") {
-      tone.gain += 2;
-      tone.mid -= 1;
-    }
+  if (amp === "mesa") {
+    tone.gain += 2;
+    tone.bass += 2;
+  }
 
-    if (effect === "delay") tone.reverb += 2;
-
-    if (effect === "chorus") {
-      tone.mid += 1;
-      tone.treble += 1;
-    }
-
-    if (effect === "reverb") tone.reverb += 3;
-  });
+  if (amp === "peavey") {
+    tone.gain += 3;
+  }
 
   // clamp values
   for (let key in tone) {
@@ -113,15 +123,8 @@ function findTone() {
   const body = document.getElementById("body").value;
   const amp = document.getElementById("amp").value;
 
-  const fxNodes = document.querySelectorAll(".fx");
-  let effects = [];
-
-  fxNodes.forEach(fx => {
-    if (fx.checked) effects.push(fx.value);
-  });
-
   let tone = getTone(input);
-  tone = applyGear(tone, pickup, body, amp, effects);
+  tone = applyGear(tone, pickup, body, amp);
 
   document.getElementById("result").innerHTML = `
     <h2>${tone.name}</h2>
