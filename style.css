@@ -13,16 +13,26 @@ body {
 input, select {
   padding: 10px;
   margin: 5px;
-  width: 200px;
+  width: 220px;
 }
 
 button {
   padding: 12px 20px;
   margin-top: 10px;
   cursor: pointer;
+  border: none;
+  background: #ff4d4d;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
 }
 
 #result {
   margin-top: 30px;
   font-size: 18px;
+}
+
+label {
+  display: block;
+  margin: 5px;
 }
